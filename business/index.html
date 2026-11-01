@@ -12,6 +12,12 @@
 <link rel="stylesheet" href="../assets/css/studio.css">
 <link rel="stylesheet" href="../assets/css/themes.css">
 <link rel="stylesheet" href="../assets/css/site-polish.css?v=20261029-3">
+<style>
+.visual.photo{position:relative;padding:0;min-height:0;aspect-ratio:16/10;max-height:400px;overflow:hidden;background:#0a0f1a}
+.visual.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.visual.photo .visual-inner{position:absolute;left:0;right:0;bottom:0;z-index:2;background:linear-gradient(transparent,rgba(5,8,16,.92));padding:24px 18px 14px;min-height:0;height:auto}
+.visual.photo .visual-tag{position:absolute;top:14px;left:14px;z-index:3}
+</style>
 </head>
 <body data-theme="business">
 <header class="site-header">
@@ -42,11 +48,11 @@
         <a class="btn btn-ghost" href="https://t.me/alex_berik" target="_blank" rel="noopener" data-i18n="btn_tg">Написать в Telegram</a>
       </div>
     </div>
-    <div class="visual scene-business photo-business" aria-hidden="true">
-      <div class="skyline"></div>
+    <div class="visual photo" aria-hidden="true">
+      <img src="../assets/img/hero-business.jpg" alt="" width="1100" height="600" loading="eager" style="object-fit:cover;width:100%;height:100%;position:absolute;inset:0;object-position:center 40%" onerror="this.style.opacity=0">
       <div class="visual-inner">
         <span class="visual-tag">GEORGIA</span>
-        <div class="visual-title" data-i18n="biz_h1">Помогаем в Грузии</div>
+        <div class="visual-title">Помогаем в Грузии</div>
         <div class="visual-sub">Tbilisi</div>
       </div>
     </div>
