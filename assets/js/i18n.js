@@ -2,10 +2,11 @@
   const dict={
     ru:{
       tagline:"Creativity. Engineered.",
+      menu_open:"Меню", menu_close:"Закрыть", con_form_hint:"Откроется Telegram с готовым текстом заявки. Проверьте его и нажмите «Отправить».",
       nav_home:"Главная",nav_ai:"AI",nav_design:"Дизайн",nav_biz:"Бизнес",nav_auto:"Авто",nav_contacts:"Контакты",
       btn_tg:"Написать в Telegram",
       eyebrow:"AI · Дизайн · Бизнес · Авто",
-      h1:"Технологии и креатив, которые работают на ваш бизнес",
+      h1:"Технологии и креатив, <em>которые работают</em> на ваш бизнес",
       lead:"Внедряем AI, создаём сайты и контент, автоматизируем процессы, помогаем в Грузии и подбираем авто. Всё под ключ.",
       cta_project:"Обсудить проект",
       t1:"Быстрая связь",t2:"Понятные этапы",t3:"Результат",
@@ -17,7 +18,7 @@
       s_biz:"Business Support",s_biz_p:"Релокация, счета, ИП, ВНЖ в Грузии",
       s_auto:"Auto",s_auto_p:"Подбор и доставка авто из США и Европы",
       more:"Подробнее →",
-      st1:"направления работы",st2:"успешных проектов",st3:"внимание к проекту",st4:"связь в Telegram",
+      st1:"направлений работы",st2:"успешных проектов",st3:"внимание к проекту",st4:"связь в Telegram",
       why:"Почему выбирают MAGIC Studio",
       w1t:"Комплексный подход",w1p:"От идеи до запуска — AI, дизайн, бизнес и авто в одной студии.",
       w2t:"Опыт на месте",w2p:"Работаем в Грузии: релокация, документы, локальный контекст.",
@@ -65,10 +66,11 @@
     },
     en:{
       tagline:"Creativity. Engineered.",
+      menu_open:"Menu", menu_close:"Close", con_form_hint:"Telegram will open with your prepared request. Review it and press Send.",
       nav_home:"Home",nav_ai:"AI",nav_design:"Design",nav_biz:"Business",nav_auto:"Auto",nav_contacts:"Contacts",
       btn_tg:"Message on Telegram",
       eyebrow:"AI · Design · Business · Auto",
-      h1:"Technology and creative that work for your business",
+      h1:"Technology and creative <em>that work</em> for your business",
       lead:"We deploy AI, build sites and content, automate processes, support relocation in Georgia, and source cars. End to end.",
       cta_project:"Discuss a project",
       t1:"Fast response",t2:"Clear steps",t3:"Results",
@@ -132,12 +134,17 @@
     document.documentElement.lang=lang;
     document.querySelectorAll("[data-i18n]").forEach(el=>{
       const k=el.getAttribute("data-i18n");
-      if(d[k]!=null) el.textContent=d[k];
+      if(d[k]!=null) el.innerHTML=d[k];
     });
     document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
     try{localStorage.setItem("ms_lang",lang)}catch(e){}
+    const menuLabel=document.querySelector(".mobile-nav-toggle [data-i18n]");if(menuLabel)menuLabel.textContent=d.menu_open||"Menu";
   }
-  document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>apply(b.dataset.lang)));
+  const menuButton=document.querySelector(".mobile-nav-toggle"),nav=document.querySelector(".nav-links");
+  function closeMenu(){if(!menuButton||!nav)return;menuButton.setAttribute("aria-expanded","false");document.body.classList.remove("nav-open");const d=dict[document.documentElement.lang]||dict.ru;const label=menuButton.querySelector("[data-i18n]");if(label)label.textContent=d.menu_open||"Menu";}
+  if(menuButton&&nav){menuButton.addEventListener("click",()=>{const opening=menuButton.getAttribute("aria-expanded")!=="true";menuButton.setAttribute("aria-expanded",String(opening));document.body.classList.toggle("nav-open",opening);const d=dict[document.documentElement.lang]||dict.ru;menuButton.querySelector("[data-i18n]").textContent=opening?(d.menu_close||"Close"):(d.menu_open||"Menu");});nav.querySelectorAll("a").forEach(a=>a.addEventListener("click",closeMenu));document.addEventListener("click",e=>{if(!e.target.closest(".site-header"))closeMenu()});document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu()});}
+  document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>{apply(b.dataset.lang);closeMenu()}));
+  const form=document.getElementById("contact-request-form");if(form)form.addEventListener("submit",e=>{e.preventDefault();if(!form.reportValidity())return;const data=new FormData(form),en=document.documentElement.lang==="en",labels=en?["Name","Email","Service","Request"]:["Имя","Email","Услуга","Заявка"];const message=["MAGIC Studio — "+labels[3],labels[0]+": "+data.get("name"),labels[1]+": "+(data.get("email")||"—"),labels[2]+": "+data.get("service"),labels[3]+": "+data.get("text")].join("\\n");const url="https://t.me/alex_berik?text="+encodeURIComponent(message);const opened=window.open(url,"_blank","noopener,noreferrer");const status=document.getElementById("contact-form-status");if(status)status.textContent=opened?(en?"Telegram opened with your draft. Review it and press Send.":"Открылся Telegram с черновиком. Проверьте его и нажмите «Отправить»."):(en?"Allow pop-ups or use the Telegram link below.":"Разрешите всплывающие окна или воспользуйтесь ссылкой Telegram ниже.");});
   const saved=(()=>{try{return localStorage.getItem("ms_lang")}catch(e){return null}})();
   apply(saved==="en"?"en":"ru");
 })();
